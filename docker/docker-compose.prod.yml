@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: next-image:prod
+    build:
+      context: ..
+      dockerfile: docker/next/prod.Dockerfile
+    env_file:
+      - ../.env.common
+      - ../.env.production
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
+
+  nginx:
+    image: nginx-image:prod
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
